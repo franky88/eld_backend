@@ -7,6 +7,11 @@ load_dotenv()
 ORS_KEY = os.getenv('ORS_API_KEY')
 ORS_BASE = 'https://api.openrouteservice.org'
 
+if not ORS_KEY:
+    raise RuntimeError("ORS_API_KEY is missing in environment variables")
+
+print("ORS_KEY:", ORS_KEY)
+
 
 def geocode(location: str) -> list:
     """Convert a city/state string to [lng, lat]."""
@@ -88,7 +93,7 @@ def get_route(coords_list: list) -> dict:
 
 def geocode_search(query: str, size: int = 5) -> list:
     """Return raw ORS geocode features for autocomplete."""
-    url = f"{ORS_BASE}/geocode/search"
+    url = f"{ORS_BASE}/geocode/autocomplete"
     params = {'api_key': ORS_KEY, 'text': query, 'size': size}
     r = requests.get(url, params=params, timeout=8)
     r.raise_for_status()
