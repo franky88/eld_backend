@@ -22,7 +22,9 @@ def geocode(location: str) -> list:
         'size': 1,
     }
     r = requests.get(url, params=params, timeout=10)
-    r.raise_for_status()
+    if not r.ok:
+        print("ORS GEO ERROR:", r.status_code, r.text)
+        r.raise_for_status()
     features = r.json().get('features', [])
     if not features:
         raise ValueError(f"Could not geocode location: {location}")
@@ -40,6 +42,7 @@ def get_route(coords_list: list) -> dict:
     headers = {
         'Authorization': ORS_KEY,
         'Content-Type': 'application/json',
+        "User-Agent": "django-render-app/1.0"
     }
     body = {
         'coordinates': coords_list,
@@ -47,7 +50,9 @@ def get_route(coords_list: list) -> dict:
         'instructions': True,  # needed to get step distances for segments
     }
     r = requests.post(url, json=body, headers=headers, timeout=15)
-    r.raise_for_status()
+    if not r.ok:
+        print("ORS ROUTE ERROR:", r.status_code, r.text)
+        r.raise_for_status()
 
     data = r.json()
     route = data['routes'][0]
@@ -93,8 +98,19 @@ def get_route(coords_list: list) -> dict:
 
 def geocode_search(query: str, size: int = 5) -> list:
     """Return raw ORS geocode features for autocomplete."""
+
     url = f"{ORS_BASE}/geocode/autocomplete"
-    params = {'api_key': ORS_KEY, 'text': query, 'size': size}
+    params = {
+        'api_key': ORS_KEY,
+        'text': query,
+        'size': size
+    }
+
     r = requests.get(url, params=params, timeout=8)
-    r.raise_for_status()
+
+    # 🔥 DEBUG: show real ORS error in production
+    if not r.ok:
+        print("ORS GEO ERROR:", r.status_code, r.text)
+        r.raise_for_status()
+
     return r.json().get('features', [])
