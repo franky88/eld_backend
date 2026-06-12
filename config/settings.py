@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost, 127.0.0.1, .onrender.com, eldbackend.franklinramos.site').split(',')
+ALLOWED_HOSTS = ["localhost", "172.0.0.1", "franky88.pythonanywhere.com", "eld.franklinramos.site", "eldbackend.franklinramos.site"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
