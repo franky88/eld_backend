@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost, 127.0.0.1, .onrender.com').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost, 127.0.0.1, .onrender.com, eldbackend.franklinramos.site').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,6 +92,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'https://eld.franklinramos.site',
+    'https://eldbackend.franklinramos.site',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -100,7 +101,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://eld.franklinramos.site",
-    "https://your-app-name.onrender.com",
+    "https://*.franklinramos.site",
+    "https://*.onrender.com",
 ]
 
 # REST Framework
