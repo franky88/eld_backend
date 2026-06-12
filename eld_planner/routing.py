@@ -100,17 +100,21 @@ def geocode_search(query: str, size: int = 5) -> list:
     """Return raw ORS geocode features for autocomplete."""
 
     url = f"{ORS_BASE}/geocode/autocomplete"
-    params = {
-        'api_key': ORS_KEY,
-        'text': query,
-        'size': size
+
+    headers = {
+        "Accept": "application/json, application/geo+json"
     }
 
-    r = requests.get(url, params=params, timeout=8)
+    params = {
+        "api_key": ORS_KEY,
+        "text": query,
+        "size": size
+    }
 
-    # 🔥 DEBUG: show real ORS error in production
+    r = requests.get(url, params=params, headers=headers, timeout=8)
+
     if not r.ok:
         print("ORS GEO ERROR:", r.status_code, r.text)
-        r.raise_for_status()
+        raise Exception(r.text)
 
-    return r.json().get('features', [])
+    return r.json().get("features", [])
